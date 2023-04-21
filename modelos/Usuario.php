@@ -38,4 +38,19 @@ class Usuario {
         }
         return false;
     }
+
+    public function listar(){
+        $qry = "select * from view_".$this->table;
+        $st = $this->conn->prepare($qry);
+        $st->execute();
+        return $st->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function individual($id){
+        $qry = "select * from ".$this->table." where id = :id";
+        $st = $this->conn->prepare($qry);
+        $st->bindParam(":id", $id, PDO::PARAM_INT);
+        $st->execute();
+        return $st->fetch(PDO::FETCH_OBJ);
+    }
 }

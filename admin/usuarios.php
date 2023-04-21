@@ -1,4 +1,11 @@
-<?php include("../includes/header.php") ?>
+<?php 
+    include("../includes/header.php");
+    include("../config/Mysql.php");
+    include("../modelos/Usuario.php");
+    $base = new Mysql();
+    $cx = $base->connect();
+    $usuarios = new Usuario($cx); 
+?>
 
 
 <div class="row">
@@ -20,18 +27,18 @@
                     </tr>
                 </thead>
                 <tbody>
-              
+                    <?php foreach ($usuarios->listar() as $usuario):?>
                     <tr>
-                        <td>4</td>
-                        <td>juan garcía</td>
-                        <td>juancgr@gmail.com</td>
-                        <td>Registrado</td>
-                        <td>2023-04-11</td>
+                        <td><?=$usuario->id?></td>
+                        <td><?=$usuario->nombre?></td>
+                        <td><?=$usuario->email?></td>
+                        <td><?=$usuario->rol?></td>
+                        <td><?=$usuario->fecha_creacion?></td>
                         <td>
-                            <a href="editar_usuario.php" class="btn btn-warning"><i class="bi bi-pencil-fill"></i></a>                                            
+                            <a href="editar_usuario.php?id=<?=$usuario->id?>" class="btn btn-warning"><i class="bi bi-pencil-fill"></i></a>                                            
                         </td>
                     </tr>
-                                           
+                    <?php endforeach;?>                       
                 </tbody>       
             </table>
     </div>
