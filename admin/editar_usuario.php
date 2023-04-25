@@ -12,8 +12,51 @@
         echo "\n".$u->nombre;
         echo "\n".$u->email;*/
     }
+    if (isset($_POST['editarUsuario'])){
+        $id = $_POST['id'];
+        $rol_id = $_POST['rol'];
+        if ($rol_id!=0){
+            if ($usuario->editar($id, $rol_id)){
+                $mensaje = "Usuario actualizado correctamente";
+                header("Location:usuarios.php?mensaje=".urlencode($mensaje));
+            }else {
+                $error = "No se pudo actualizar el usuario";
+            }
+        }else {
+            $error = "Error, debe seleccionar un rol!!";
+        }
+    }
+    if (isset($_POST['borrarUsuario'])){
+        $id = $_POST['id'];
+        if ($usuario->eliminar($id)){
+            $mensaje = "Se eliminó correctamente el Usuario";
+            header("Location:usuarios.php?mensaje=".urlencode($mensaje));
+        } else {
+            $error = "No se pudo eliminar el usuario";
+        }
+    }
 ?>
-
+    <!--Imprimir el error o el mensaje -->
+    <div class="row">
+        <div class="col-sm-12">
+            <?php if (isset($error)) : ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong><?=$error?></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif ;?>    
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <?php if (isset($mensaje)) : ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><?=$mensaje?></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif ;?>    
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-sm-12">
@@ -37,7 +80,7 @@
             <div class="mb-3">
             <label for="rol" class="form-label">Rol:</label>
             <select class="form-select" aria-label="Default select example" name="rol">
-                <option value="">--Selecciona un rol--</option>
+                <option value="0">--Selecciona un rol--</option>
                 <option value="1" <?=($u->rol_id==1?'selected':'')?>>Administrador</option>  
                 <option value="2" <?=($u->rol_id==2?'selected':'')?>>Registrado</option>
                              

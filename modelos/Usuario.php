@@ -53,4 +53,51 @@ class Usuario {
         $st->execute();
         return $st->fetch(PDO::FETCH_OBJ);
     }
+
+    public function editar($id, $rol_id){
+        $qry = "update ". $this->table . " set rol_id = :rol_id where id = :id";
+        $st = $this->conn->prepare($qry);
+        $st->bindParam(":rol_id",$rol_id, PDO::PARAM_INT);
+        $st->bindParam(":id", $id, PDO::PARAM_INT);
+        if ($st->execute()){
+            return true;
+        }
+        printf ("Error $s\n", $st->error);       
+        return false; 
+    }
+
+    public function eliminar ($id){
+        $qry = "delete from ". $this->table . " where id = :id";
+        $st = $this->conn->prepare($qry);
+        $st->bindParam(":id", $id, PDO::PARAM_INT);
+        try {
+            if ($st->execute()){
+                return true;
+            }
+        }catch(Exception $e) {
+            return false;
+        }
+    }
+
+    public function acceder ($email, $password){
+        $pass = md5($password);
+        $qry = "select * from " . $this->table . " where email= :email and password = :password";
+        $st = $this->conn->prepare($qry);
+        $st->bindParam (':email', $email, PDO::PARAM_STR);
+        $st->bindParam (':password', $pass, PDO::PARAM_STR);
+        $st->execute();
+        if ($st->fetch(PDO::FETCH_ASSOC)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function usuario_email ($email){
+        $qry = "select * from " . $this->table . " where email = :email";
+        $st = $this->conn->prepare($qry);
+        $st->bindParam (':email', $email, PDO::PARAM_STR);
+        $st->execute();
+        return $st->fetch(PDO::FETCH_OBJ);
+    }
 }
