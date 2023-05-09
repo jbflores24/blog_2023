@@ -1,7 +1,6 @@
 <?php 
     include("includes/header_front.php"); 
     include("config/Mysql.php");
-    include("config/config.php");
     include("modelos/Usuario.php");
     $base = new Mysql();
     $cx = $base->connect();

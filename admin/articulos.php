@@ -1,4 +1,11 @@
-<?php include("../includes/header.php") ?>
+<?php 
+    include("../includes/header.php"); 
+    include("../config/Mysql.php");
+    include("../modelos/Articulo.php");
+    $base = new Mysql();
+    $cx = $base->connect();
+    $articulos = new Articulo($cx);
+?>
 
 
 <div class="row">
@@ -23,20 +30,20 @@
                     </tr>
                 </thead>
                 <tbody>
-             
-                    <tr>
-                        <td>1</td>
-                        <td>test</td>
-                        <td>
-                            <img class="img/articulos/" style="width:180px;">
-                        </td>
-                        <td>test</td>
-                        <td>test</td>                      
-                        <td>
-                        <a href="editar_articulo.php" class="btn btn-warning"><i class="bi bi-pencil-fill"></i></a>                       
-                        </td>
-                    </tr>
-               
+                    <?php foreach($articulos->listar() as $articulo):?>
+                        <tr>
+                            <td><?=$articulo->id?></td>
+                            <td><?=$articulo->titulo?></td>
+                            <td>
+                                <img src="<?=RUTA_FRONT?>img/articulos/<?=$articulo->imagen?>" style="width:180px;">
+                            </td>
+                            <td><?=$articulo->texto?></td>
+                            <td><?=$articulo->fecha_creacion?></td>                      
+                            <td>
+                            <a href="editar_articulo.php" class="btn btn-warning"><i class="bi bi-pencil-fill"></i></a>                       
+                            </td>
+                        </tr>
+                    <?php endforeach;?>
                 </tbody>       
             </table>
     </div>
