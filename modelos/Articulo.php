@@ -21,4 +21,19 @@
             $st->execute();
             return $st->fetchAll(PDO::FETCH_OBJ);
         }
+
+        public function crear ($titulo, $imagen, $texto, $usuario_id){
+            $qry = "insert into ". $this->table. "(titulo, imagen, texto, usuario_id) values (:titulo, :imagen, :texto, :usuario_id)";
+            $st = $this->conn->prepare($qry);
+            $st->bindParam(':titulo', $titulo, PDO::PARAM_STR);
+            $st->bindParam(':imagen', $imagen, PDO::PARAM_STR);
+            $st->bindParam(':texto', $texto, PDO::PARAM_STR);
+            $st->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
+            if ($st->execute()){
+                return true;
+            }
+            printf ("Error $s\n", $st->error);       
+            $st->close();
+            return false;
+        }
     }
