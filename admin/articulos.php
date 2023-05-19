@@ -25,12 +25,15 @@
                         <th>Titulo</th>
                         <th>Imagen</th> 
                         <th>Texto</th>
+                        <?php if ($_SESSION['rol_id']==1):?>
+                            <th>Autor</th>
+                        <?php endif;?>
                         <th>Fecha de creación</th>              
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($articulos->listar() as $articulo):?>
+                    <?php foreach($articulos->listar($_SESSION['id'], $_SESSION['rol_id']) as $articulo):?>
                         <tr>
                             <td><?=$articulo->id?></td>
                             <td><?=$articulo->titulo?></td>
@@ -38,6 +41,9 @@
                                 <img src="<?=RUTA_FRONT?>img/articulos/<?=$articulo->imagen?>" style="width:180px;">
                             </td>
                             <td><?=$articulo->texto?></td>
+                            <?php if ($_SESSION['rol_id']==1):?>
+                                <td><?=$articulo->autor?></td>
+                            <?php endif;?>
                             <td><?=$articulo->fecha_creacion?></td>                      
                             <td>
                             <a href="editar_articulo.php" class="btn btn-warning"><i class="bi bi-pencil-fill"></i></a>                       
