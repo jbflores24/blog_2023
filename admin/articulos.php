@@ -70,7 +70,7 @@
                             <?php endif;?>
                             <td><?=$articulo->fecha_creacion?></td>                      
                             <td>
-                            <a href="gestion_articulo.php?op=2" class="btn btn-warning"><i class="bi bi-pencil-fill"></i></a>                       
+                            <a href="gestion_articulo.php?op=2&id=<?=$articulo->id?>" class="btn btn-warning"><i class="bi bi-pencil-fill"></i></a>                       
                             </td>
                         </tr>
                     <?php endforeach;?>

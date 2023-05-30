@@ -11,6 +11,8 @@
             $titulo = "Crear Artículo";
         } else {
             $titulo = "Editar Artículo";
+            $id = $_GET['id'];
+            $article = $articulo->getArticulo($id);
         }
     }
     if (isset($_POST['gestionArticulo'])){
@@ -23,7 +25,10 @@
             if ($op!=2){
                 $error = "Debe seleccionar una imagen";
             } else {
-                //se va a editar
+                if ($articulo->editar($id,$titulo,'',$texto)){
+                    $mensaje = "Articulo editado correctamente!!";
+                    header("Location:articulos.php?mensaje=".urlencode($mensaje));
+                }
             }
         } else {
             $image = $_FILES['imagen']['name'];
@@ -43,11 +48,24 @@
                         $error ="No se pudo crear el artículo";
                     }
                 } else {
-                    //Va a editar
+                    if ($articulo->editar($id,$titulo,$newImage,$texto)){
+                        $mensaje = "Articulo editado correctamente!!";
+                        header("Location:articulos.php?mensaje=".urlencode($mensaje));
+                    } else {
+                        $error ="No se pudo editar el artículo";
+                    }
                 }
             }
         }
       }  
+    }
+    if (isset($_POST['borrarArticulo'])){
+        if ($articulo->eliminar($id)){
+            $mensaje = "Articulo eliminado correctamente!!";
+            header("Location:articulos.php?mensaje=".urlencode($mensaje));
+        } else {
+            $error ="No se pudo borrar el artículo";
+        }
     }
 ?>
 <!--Imprimir el error o el mensaje -->
@@ -84,15 +102,15 @@
     <div class="row">
         <div class="col-sm-6 offset-3">
         <form method="POST" action="" enctype="multipart/form-data">
-            <input type="hidden" name="id" value="4">
+            <input type="hidden" name="id" value="<?=$article->id?>">
 
             <div class="mb-3">
                 <label for="titulo" class="form-label">Título:</label>
-                <input type="text" class="form-control" name="titulo" id="titulo" value="titulo test">               
+                <input type="text" class="form-control" name="titulo" id="titulo" value="<?=$article->titulo?>">               
             </div>
             <?php if ($op==2):?>
                 <div class="mb-3">
-                    <img class="img-fluid img-thumbnail" src="../img/articulos/img4.jpg">
+                    <img class="img-fluid img-thumbnail" src="../img/articulos/<?=$article->imagen?>">
                 </div>
             <?php endif;?>
             <div class="mb-3">
@@ -102,7 +120,7 @@
             <div class="mb-3">
                 <label for="texto">Texto</label>   
                 <textarea class="form-control" placeholder="Escriba el texto de su artículo" name="texto" style="height: 200px">
-               ejemplo texto
+                <?=$article->texto?>
                 </textarea>              
             </div>          
         
