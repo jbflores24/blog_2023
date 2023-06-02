@@ -2,17 +2,52 @@
     include("includes/header_front.php");
     include ('config/Mysql.php');
     include ('modelos/Articulo.php');
+    include ('modelos/Comentario.php');
+
     $base = new Mysql();
     $cx = $base->connect();
     $articulo = new Articulo($cx);
+    $comentario = new Comentario($cx);
     if (isset($_GET['id'])){
         $id = $_GET['id'];
         $article = $articulo->getArticulo($id);
+    }
+    if (isset($_POST['enviarComentario'])){
+        $texto = $_POST['comentario'];
+        if (!(empty($texto) || $texto=='')){
+            $usuario_id = $_SESSION['id'];
+            $articulo_id = $_POST['articulo'];
+            if ($comentario->crear_comentario($texto, $usuario_id, $articulo_id)){
+                header("Location:index.php");
+            } else {
+                $error = "Error al crear el comentario";
+            }
+        }else {
+            $error = "Tiene que escribir algún comentario";
+        }
     } 
 ?>
 
+    <!--Imprimir el error o el mensaje -->
     <div class="row">
-       
+        <div class="col-sm-12">
+            <?php if (isset($error)) : ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong><?=$error?></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif ;?>    
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <?php if (isset($mensaje)) : ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong><?=$mensaje?></strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif ;?>    
+        </div>
     </div>
 
     <div class="container-fluid"> 
@@ -67,10 +102,10 @@
 
     <div class="row">
     <h3 class="text-center mt-5">Comentarios</h3>
-      
-            <h4><i class="bi bi-person-circle"></i> juangarcia@gmail.com</h4>
-            <p>texto comentario demo</p>
-      
+        <?php foreach($comentario->comentarios_articulo($id) as $comentario):?>
+            <h4><i class="bi bi-person-circle"></i><?=$comentario->autor?></h4>
+            <p><?=$comentario->comentario?></p>
+        <?php endforeach;?>
     </div>
          
     </div>

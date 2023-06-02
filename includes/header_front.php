@@ -1,6 +1,7 @@
 <?php
     session_start();
     include("./config/config.php");
+    include('./helpers/helpers_formato.php');
 ?>
 <!doctype html>
 <html lang="es">

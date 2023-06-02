@@ -102,11 +102,11 @@
     <div class="row">
         <div class="col-sm-6 offset-3">
         <form method="POST" action="" enctype="multipart/form-data">
-            <input type="hidden" name="id" value="<?=$article->id?>">
+            <input type="hidden" name="id" value="<?=isset($article->id)?$article->id:1?>">
 
             <div class="mb-3">
                 <label for="titulo" class="form-label">Título:</label>
-                <input type="text" class="form-control" name="titulo" id="titulo" value="<?=$article->titulo?>">               
+                <input type="text" class="form-control" name="titulo" id="titulo" value="<?=isset($article->titulo)?$article->titulo:''?>">               
             </div>
             <?php if ($op==2):?>
                 <div class="mb-3">
@@ -120,7 +120,7 @@
             <div class="mb-3">
                 <label for="texto">Texto</label>   
                 <textarea class="form-control" placeholder="Escriba el texto de su artículo" name="texto" style="height: 200px">
-                <?=$article->texto?>
+                <?=isset($article->texto)?$article->texto:''?>
                 </textarea>              
             </div>          
         
